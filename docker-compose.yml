@@ -1,0 +1,22 @@
+db:
+  image: postgres
+  environment:
+    - POSTGRES_USER=mutalyzer
+    - POSTGRES_DB=mutalyzer
+    - POSTGRES_PASSWORD=mutalyzer
+  ports:
+    - "5432:5432"
+
+cache:
+  image: redis:alpine
+
+mutalyzer:
+  build: .
+  environment:
+    - DATABASE_URI=postgresql://mutalyzer:mutalyzer@db/mutalyzer
+    - REDIS_URI=redis://cache
+  links:
+    - db:db
+    - cache:cache
+  ports:
+    - "8082:8082"
