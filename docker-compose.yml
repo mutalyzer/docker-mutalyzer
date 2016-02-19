@@ -10,13 +10,48 @@ db:
 cache:
   image: redis:alpine
 
-mutalyzer:
-  build: .
+
+api:
+  image: mutalyzer:2.0.15
+  command: ["mutalyzer-service-json", "-H", "0.0.0.0", "-p", "8082"]
   environment:
     - DATABASE_URI=postgresql://mutalyzer:mutalyzer@db/mutalyzer
     - REDIS_URI=redis://cache
+    - CACHE_DIR=/data/cache
   links:
-    - db:db
-    - cache:cache
+    - db
+    - cache
   ports:
     - "8082:8082"
+  volumes:
+    - /data/cache
+
+
+batchproc:
+  image: mutalyzer:2.0.15
+  command: ["mutalyzer-batch-processor"]
+  environment:
+    - DATABASE_URI=postgresql://mutalyzer:mutalyzer@db/mutalyzer
+    - REDIS_URI=redis://cache
+    - CACHE_DIR=/data/cache
+  links:
+    - db
+    - cache
+  volumes_from:
+    - api
+
+
+web:
+  image: mutalyzer:2.0.15
+  command: ["mutalyzer-website", "-H", "0.0.0.0", "-p", "8080"]
+  environment:
+    - DATABASE_URI=postgresql://mutalyzer:mutalyzer@db/mutalyzer
+    - REDIS_URI=redis://cache
+    - CACHE_DIR=/data/cache
+  links:
+    - db
+    - cache
+  ports:
+    - "8080:8080"
+  volumes_from:
+    - api
