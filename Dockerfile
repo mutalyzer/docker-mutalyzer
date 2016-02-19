@@ -6,9 +6,9 @@ ENV WKDIR /data
 RUN mkdir -p ${WKDIR}
 WORKDIR ${WKDIR}
 
-ADD repositories /etc/apk/repositories
+ADD etc/repositories /etc/apk/repositories
 
-RUN apk add --no-cache curl python python-dev py-pip py-lxml py-mysqldb \
+RUN apk add --no-cache bash curl python python-dev py-pip py-lxml py-mysqldb \
     py-requests py-psycopg2@testing py-numpy-dev@testing \
   && apk add --no-cache --virtual=build-deps build-base ca-certificates swig git
 
@@ -25,9 +25,9 @@ ENV MUTALYZER_SETTINGS ${WKDIR}/mutalyzer/settings.py
 COPY etc/settings.py $MUTALYZER_SETTINGS
 
 # scripts
-COPY bin/* ${WKDIR}/
+COPY bin/* /
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 8082
 CMD ["mutalyzer-service-json", "-H", "0.0.0.0"]
