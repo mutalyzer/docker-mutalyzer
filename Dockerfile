@@ -1,27 +1,24 @@
-FROM python:2.7
-MAINTAINER Pasha Katsev <p7k@gmail.com>
-
-# sys deps
-ENV DEPS python-dev libxml2-dev libxslt-dev swig libpq-dev
-RUN apt-get update
-RUN apt-get install -y $DEPS --no-install-recommends
+FROM alpine:latest
+MAINTAINER Pasha Katsev <pkatsev@gmail.com>
 
 # workspace
 ENV WKDIR /data
 RUN mkdir -p ${WKDIR}
 WORKDIR ${WKDIR}
 
-# dl/extract mutalyzer release
-RUN mkdir mutalyzer
-RUN curl -fsSL https://github.com/mutalyzer/mutalyzer/archive/v2.0.15.tar.gz \
-  | tar zxC mutalyzer --strip=1
+ADD repositories /etc/apk/repositories
 
-# python env
-RUN pip install -U setuptools pip
-RUN pip install numpy
-RUN pip install psycopg2
-RUN pip install -r mutalyzer/requirements.txt
-RUN pip install mutalyzer/
+RUN apk add --no-cache curl python python-dev py-pip py-lxml py-mysqldb \
+    py-requests py-psycopg2@testing py-numpy-dev@testing \
+  && apk add --no-cache --virtual=build-deps build-base ca-certificates swig git
+
+RUN curl -fsSL https://github.com/mutalyzer/mutalyzer/archive/v2.0.15.tar.gz | tar zx \
+  && mv mutalyzer-2.0.15 mutalyzer
+
+RUN pip install -r mutalyzer/requirements.txt \
+  && pip install mutalyzer/
+
+# RUN apk del build-deps
 
 # settings
 ENV MUTALYZER_SETTINGS ${WKDIR}/mutalyzer/settings.py
