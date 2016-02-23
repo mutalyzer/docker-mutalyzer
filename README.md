@@ -8,6 +8,7 @@ Postgres (db) and Redis (cache).
 Starts the PostgreSQL DB, Redis cache, and the JSON RESTful webservices for
 Mutalyzer.  The default entrypoint should run outstanding DB migrations.
 
+`docker build -t mutalyzer:2.0.15 .`
 `docker-compose up -d`
 
 ## Future
