@@ -66,8 +66,7 @@ web:
     - api
 ```
 
-There are also two helper scripts to add GHCr37/hg19 assembly and transcripts to Mutalyzer.
-They can be run in the following fashion:
+There are also two helper scripts to add GHCr37/hg19 assembly and transcripts to Mutalyzer:
 
 `docker exec <name of mutalyzer api container> sh import_assembly_GRCh37.sh`
 
