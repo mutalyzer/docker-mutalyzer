@@ -1,5 +1,5 @@
 FROM python:2.7
-MAINTAINER Pasha Katsev <p7k@gmail.com>
+MAINTAINER Pasha Katsev <pkatsev@gmail.com>
 
 # workspace
 RUN mkdir -p /data/cache
@@ -7,13 +7,16 @@ WORKDIR /data
 
 # dependencies
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends python-dev \
-  libxml2-dev libxslt-dev swig libpq-dev
-
+	&& apt-get install -y --no-install-recommends \
+		libpq-dev \
+		libxml2-dev \
+		libxslt-dev \
+		python-dev \
+		swig
 
 # dl/extract mutalyzer release
 RUN mkdir mutalyzer \
-  && curl -fsSL https://github.com/mutalyzer/mutalyzer/archive/v2.0.15.tar.gz \
+  && curl -fsSL https://github.com/mutalyzer/mutalyzer/archive/v2.0.17.tar.gz \
   | tar zxC mutalyzer --strip=1
 
 # python env

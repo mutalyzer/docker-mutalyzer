@@ -5,15 +5,14 @@ db:
     - POSTGRES_DB=mutalyzer
     - POSTGRES_PASSWORD=mutalyzer
   ports:
-    - "5432:5432"
+    - '5432:5432'
 
 cache:
   image: redis:alpine
 
-
 api:
-  image: mutalyzer:2.0.15
-  command: ["mutalyzer-service-json", "-H", "0.0.0.0", "-p", "8082"]
+  image: p7k/mutalyzer
+  command: mutalyzer-service-json -H 0.0.0.0 -p 8082
   environment:
     - DATABASE_URI=postgresql://mutalyzer:mutalyzer@db/mutalyzer
     - REDIS_URI=redis://cache
@@ -22,14 +21,13 @@ api:
     - db
     - cache
   ports:
-    - "8082:8082"
+    - '8082:8082'
   volumes:
     - /data/cache
 
-
 batchproc:
-  image: mutalyzer:2.0.15
-  command: ["mutalyzer-batch-processor"]
+  image: p7k/mutalyzer
+  command: mutalyzer-batch-processor
   environment:
     - DATABASE_URI=postgresql://mutalyzer:mutalyzer@db/mutalyzer
     - REDIS_URI=redis://cache
@@ -40,10 +38,9 @@ batchproc:
   volumes_from:
     - api
 
-
 web:
-  image: mutalyzer:2.0.15
-  command: ["mutalyzer-website", "-H", "0.0.0.0", "-p", "8080"]
+  image: p7k/mutalyzer
+  command: mutalyzer-website -H 0.0.0.0 -p 8080
   environment:
     - DATABASE_URI=postgresql://mutalyzer:mutalyzer@db/mutalyzer
     - REDIS_URI=redis://cache
@@ -52,6 +49,6 @@ web:
     - db
     - cache
   ports:
-    - "8080:8080"
+    - '8080:8080'
   volumes_from:
     - api
