@@ -69,11 +69,11 @@ web:
 There are also two helper scripts to add GHCr37/hg19 assembly and transcripts to Mutalyzer.
 They can be run in the following fashion:
 
-`docker run --entrypoint= eidetiq/mutalyzer import_assembly_GRCh37.sh`
+`docker exec <name of mutalyzer api container> sh import_assembly_GRCh37.sh`
 
 and
 
-`docker run --entrypoint= eidetiq/mutalyzer import_transcript_mappings_GRCh37.sh`
+`docker exec <name of mutalyzer api container> sh import_transcript_mappings_GRCh37.sh`
 
 
 ## Future
