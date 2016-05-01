@@ -11,7 +11,7 @@ cache:
   image: redis:alpine
 
 api:
-  image: p7k/mutalyzer
+  image: eidetiq/mutalyzer
   command: mutalyzer-service-json -H 0.0.0.0 -p 8082
   environment:
     - DATABASE_URI=postgresql://mutalyzer:mutalyzer@db/mutalyzer
@@ -26,7 +26,7 @@ api:
     - /data/cache
 
 batchproc:
-  image: p7k/mutalyzer
+  image: eidetiq/mutalyzer
   command: mutalyzer-batch-processor
   environment:
     - DATABASE_URI=postgresql://mutalyzer:mutalyzer@db/mutalyzer
@@ -39,7 +39,7 @@ batchproc:
     - api
 
 web:
-  image: p7k/mutalyzer
+  image: eidetiq/mutalyzer
   command: mutalyzer-website -H 0.0.0.0 -p 8080
   environment:
     - DATABASE_URI=postgresql://mutalyzer:mutalyzer@db/mutalyzer
