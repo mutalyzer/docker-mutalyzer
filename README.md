@@ -74,6 +74,10 @@ and
 
 `docker exec <name of mutalyzer api container> sh import_transcript_mappings_GRCh37.sh`
 
+Another useful command retrieves the Mutalyzer reformatted transcript mappings:
+
+`docker-compose exec db psql mutalyzer -U mutalyzer -c "COPY transcript_mappings TO STDOUT WITH CSV DELIMITER ' ' HEADER" > gene.accession.mutalyzer.hg19.tsv`
+
 
 ## Future
 
